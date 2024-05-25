@@ -1,5 +1,5 @@
 param (
-    [string]$projectDir = $(throw "Please specify a project directory")
+    [string]$projectDir = ".\\project"
 )
 
 # Проверка наличия git
@@ -10,6 +10,20 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 # Проверка наличия go
 if (-not (Get-Command go -ErrorAction SilentlyContinue)) {
     throw "Go is not installed or not in PATH"
+}
+
+# Проверка существования каталога и его очистка
+if (Test-Path $projectDir) {
+    Write-Host "Directory $projectDir already exists. Removing..."
+    try {
+        Remove-Item -Recurse -Force $projectDir
+    } catch {
+        throw "Failed to remove existing directory: $_"
+    }
+
+    if (Test-Path $projectDir) {
+        throw "Failed to remove existing directory"
+    }
 }
 
 # Клонирование репозитория
@@ -36,10 +50,5 @@ if ($LASTEXITCODE -ne 0) {
     throw "Failed to run goinit.exe"
 }
 
-# Запуск сервера
-Write-Host "Starting server..."
-Set-Location -Path "cmd/goserver"
-go run main.go
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to start server"
-}
+Write-Host "Project initialized successfully."
+

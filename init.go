@@ -11,11 +11,18 @@ import (
 func main() {
 	projectName := "goserver"
 
-	// Создание файла go.mod
-	cmd := exec.Command("go", "mod", "init", projectName)
-	err := cmd.Run()
-	if err != nil {
-		log.Fatalf("Failed to initialize go module: %v", err)
+	// Проверка наличия файла go.mod
+	if _, err := os.Stat("go.mod"); os.IsNotExist(err) {
+		// Создание файла go.mod
+		cmd := exec.Command("go", "mod", "init", projectName)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Run()
+		if err != nil {
+			log.Fatalf("Failed to initialize go module: %v", err)
+		}
+	} else {
+		fmt.Println("go.mod already exists, skipping 'go mod init'")
 	}
 
 	// Создание базовой структуры каталогов
@@ -54,10 +61,11 @@ func main() {
 	}
 }
 `
-	err = os.WriteFile(mainFile, []byte(mainContent), 0644)
+	err := os.WriteFile(mainFile, []byte(mainContent), 0644)
 	if err != nil {
 		log.Fatalf("Failed to write main.go: %v", err)
 	}
 
 	fmt.Println("Project initialized successfully.")
 }
+

@@ -1,0 +1,14 @@
+{
+    "name": "goserver",
+    "version": "1.0.0",
+    "description": "Go server initialization and setup",
+    "main": "index.js",
+    "scripts": {
+      "init": "powershell -ExecutionPolicy Bypass -File init-project.ps1 -projectDir .\\project",
+      "start": "powershell -ExecutionPolicy Bypass -Command \"cd .\\project\\cmd\\goserver; go run main.go\""
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {}
+  }
+  
