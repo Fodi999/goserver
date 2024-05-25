@@ -7,4 +7,8 @@ services:
       - "8080:8080"
     environment:
       - CGO_ENABLED=1
+      - CC=gcc
+    command: ["go", "run", "cmd/goserver/main.go"]
+
+
  

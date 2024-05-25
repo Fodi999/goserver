@@ -1,20 +1,22 @@
- # Используем официальный образ Go с поддержкой CGO
-FROM golang:1.22.0
+# Использование официального образа Go с поддержкой CGO
+FROM golang:1.20
 
-# Устанавливаем рабочую директорию внутри контейнера
+# Установка gcc
+RUN apt-get update && apt-get install -y gcc
+
+# Создание рабочей директории
 WORKDIR /app
 
-# Копируем go.mod и go.sum для установки зависимостей
-COPY go.mod go.sum ./
-
-# Устанавливаем зависимости
-RUN go mod download
-
-# Копируем остальные файлы проекта
+# Копирование всех файлов проекта в контейнер
 COPY . .
 
-# Компилируем приложение
-RUN CGO_ENABLED=1 GOOS=linux go build -o goserver ./cmd/goserver
+# Установка зависимостей
+RUN go mod download
 
-# Указываем команду для запуска приложения
-CMD ["./goserver"]
+# Компиляция goinit
+RUN CGO_ENABLED=1 go build -o goinit init.go
+
+# Команда по умолчанию для запуска сервера
+CMD ["go", "run", "cmd/goserver/main.go"]
+
+

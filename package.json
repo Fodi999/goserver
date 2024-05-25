@@ -4,11 +4,12 @@
     "description": "Go server initialization and setup",
     "main": "index.js",
     "scripts": {
-      "init": "powershell -ExecutionPolicy Bypass -File init-project.ps1 -projectDir .\\project",
-      "start": "powershell -ExecutionPolicy Bypass -Command \"cd .\\project\\cmd\\goserver; go run main.go\""
+      "init": "docker-compose build",
+      "start": "docker-compose up"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {}
   }
+  
   
